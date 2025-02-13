@@ -280,7 +280,6 @@ public class CalculatorController implements Initializable {
                     calResult = number.get(0) / number.get(1);
                 } catch (ArithmeticException e) {
                     System.out.println("Arithmatic Exception 발생!");
-                    calResult = 00000000;
                 }
 //                calResult = number.get(0) / number.get(1);
                 break;
