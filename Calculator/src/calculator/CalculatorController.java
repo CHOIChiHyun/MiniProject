@@ -2,6 +2,8 @@ package calculator;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -57,27 +59,28 @@ public class CalculatorController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         btnClose.setOnAction(event -> Platform.exit());
-        btnClear.setOnAction(event -> handleBtnClearAction(event));
-        btnResult.setOnAction(event -> handleBtnResultAction(event));
-        btnBackspace.setOnAction(event -> handleBtnBackspaceAction(event));
+        btnClear.setOnAction(this::handleBtnClearAction);
+        btnResult.setOnAction(this::handleBtnResultAction);
+        btnBackspace.setOnAction(this::handleBtnBackspaceAction);
 
-        btn0.setOnAction(event -> handleBtn0Action(event));
-        btn1.setOnAction(event -> handleBtn1Action(event));
-        btn2.setOnAction(event -> handleBtn2Action(event));
-        btn3.setOnAction(event -> handleBtn3Action(event));
-        btn4.setOnAction(event -> handleBtn4Action(event));
-        btn5.setOnAction(event -> handleBtn5Action(event));
-        btn6.setOnAction(event -> handleBtn6Action(event));
-        btn7.setOnAction(event -> handleBtn7Action(event));
-        btn8.setOnAction(event -> handleBtn8Action(event));
-        btn9.setOnAction(event -> handleBtn9Action(event));
+        btn0.setOnAction(this::handleBtn0Action);
+        btn1.setOnAction(this::handleBtn1Action);
+        btn2.setOnAction(this::handleBtn2Action);
+        btn3.setOnAction(this::handleBtn3Action);
+        btn4.setOnAction(this::handleBtn4Action);
+        btn5.setOnAction(this::handleBtn5Action);
+        btn6.setOnAction(this::handleBtn6Action);
+        btn7.setOnAction(this::handleBtn7Action);
+        btn8.setOnAction(this::handleBtn8Action);
+        btn9.setOnAction(this::handleBtn9Action);
 
-        btnAdd.setOnAction(event -> handleBtnAddAction(event));
-        btnSub.setOnAction(event -> handleBtnSubAction(event));
-        btnMul.setOnAction(event -> handleBtnMulAction(event));
-        btnDiv.setOnAction(event -> handleBtnDivAction(event));
+        btnAdd.setOnAction(this::handleBtnAddAction);
+        btnSub.setOnAction(this::handleBtnSubAction);
+        btnMul.setOnAction(this::handleBtnMulAction);
+        btnDiv.setOnAction(this::handleBtnDivAction);
 
-        Platform.runLater(() -> {
+        // 키보드 입력 설정
+        Platform.runLater(() ->
             result.getScene().setOnKeyPressed(event -> {
                 KeyCode code = event.getCode();
                 boolean isShiftPressed = event.isShiftDown();
@@ -168,15 +171,15 @@ public class CalculatorController implements Initializable {
                     default:
                         break;
                 }
-            });
-        });
+            })
+        );
     }
 
-    private int calResult = 0;
-    ArrayList<Integer> number = new ArrayList<Integer>();
-    ArrayList<String> strNumber = new ArrayList<String>();
-    ArrayList<String> oper = new ArrayList<String>();
-    Calculator calculator = new Calculator();
+    private int calResult = 0;  //연산 결과
+    ArrayList<Integer> number = new ArrayList<>(); // 입력된 숫자 배열
+    ArrayList<String> strNumber = new ArrayList<>();  // 입력된 숫자 배열(String)
+    ArrayList<String> oper = new ArrayList<>();   // 입력된 연산자 배열
+    Calculator calculator = new Calculator();   // Calculator Model
 
     private void handleBtn0Action(ActionEvent event) {
         displayNumber(btn0);
@@ -252,11 +255,11 @@ public class CalculatorController implements Initializable {
     private void handleBtnBackspaceAction(ActionEvent event) {
         int length = strNumber.size();
         strNumber.remove(length - 1);
-        String backspaceNumber = "";
+        StringBuilder backspaceNumber = new StringBuilder();
         for (int i = 0; i < strNumber.size(); i++) {
-            backspaceNumber += strNumber.get(i);
+            backspaceNumber.append(strNumber.get(i));
         }
-        result.setText(backspaceNumber);
+        result.setText(backspaceNumber.toString());
     }
 
     private void calculate() {
@@ -267,21 +270,20 @@ public class CalculatorController implements Initializable {
 
         switch (oper.get(0)) {
             case "+":
-                calResult = number.get(0) + number.get(1);
+                calResult = (int) calculator.add(number.get(0), number.get(1));
                 break;
             case "-":
-                calResult = number.get(0) - number.get(1);
+                calResult = (int) calculator.sub(number.get(0), number.get(1));
                 break;
             case "X":
-                calResult = number.get(0) * number.get(1);
+                calResult = (int) calculator.mul(number.get(0), number.get(1));
                 break;
             case "/":
                 try {
-                    calResult = number.get(0) / number.get(1);
+                    calResult = (int) calculator.div(number.get(0), number.get(1));
                 } catch (ArithmeticException e) {
-                    System.out.println("Arithmatic Exception 발생!");
+                    System.out.println("Arithmetic Exception 발생!");
                 }
-//                calResult = number.get(0) / number.get(1);
                 break;
             default:
                 break;
@@ -295,29 +297,33 @@ public class CalculatorController implements Initializable {
     }
 
     private void displayNumber(Button button) {
-        if (result.getText().equals("+") || result.getText().equals("-") || result.getText().equals("X") || result.getText().equals("/")) {
+        List<String> operators = Arrays.asList("+", "-", "X", "/");
+
+        if (operators.contains(result.getText())) {
             result.setText("");
         }
+
         String inputNumber = button.getText();
         strNumber.add(inputNumber);
-        String setNumber = "";
+
+        StringBuilder setNumber = new StringBuilder();
         for (int i = 0; i < strNumber.size(); i++) {
-            setNumber += strNumber.get(i);
+            setNumber.append(strNumber.get(i));
         }
-        result.setText(setNumber);
+
+        result.setText(setNumber.toString());
     }
 
     private void saveNumber() {
         try {
-            String num = "";
+            StringBuilder num = new StringBuilder();
             for (int i = 0; i < strNumber.size(); i++) {
-                num += strNumber.get(i);
+                num.append(strNumber.get(i));
             }
             strNumber.clear();
-            number.add(Integer.parseInt(num));
+            number.add(Integer.parseInt(num.toString()));
         } catch (NumberFormatException e) {
             System.out.println("NumberFormatException 발생!");
-            System.out.println("현재 저장된 Number = " + number.get(0));
         }
     }
 
