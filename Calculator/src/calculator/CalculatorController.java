@@ -187,34 +187,16 @@ public class CalculatorController implements Initializable {
     ArrayList<String> oper = new ArrayList<>();   // 입력된 연산자 배열
     Calculator calculator = new Calculator();   // Calculator Model
 
-    private void handleBtn0Action(ActionEvent event) {
-        displayNumber(btn0);
-    }
+    private void handleBtn0Action(ActionEvent event) { displayNumber(btn0); }
     private void handleBtn1Action(ActionEvent event) { displayNumber(btn1); }
-    private void handleBtn2Action(ActionEvent event) {
-        displayNumber(btn2);
-    }
-    private void handleBtn3Action(ActionEvent event) {
-        displayNumber(btn3);
-    }
-    private void handleBtn4Action(ActionEvent event) {
-        displayNumber(btn4);
-    }
-    private void handleBtn5Action(ActionEvent event) {
-        displayNumber(btn5);
-    }
-    private void handleBtn6Action(ActionEvent event) {
-        displayNumber(btn6);
-    }
-    private void handleBtn7Action(ActionEvent event) {
-        displayNumber(btn7);
-    }
-    private void handleBtn8Action(ActionEvent event) {
-        displayNumber(btn8);
-    }
-    private void handleBtn9Action(ActionEvent event) {
-        displayNumber(btn9);
-    }
+    private void handleBtn2Action(ActionEvent event) { displayNumber(btn2); }
+    private void handleBtn3Action(ActionEvent event) { displayNumber(btn3); }
+    private void handleBtn4Action(ActionEvent event) { displayNumber(btn4); }
+    private void handleBtn5Action(ActionEvent event) { displayNumber(btn5); }
+    private void handleBtn6Action(ActionEvent event) { displayNumber(btn6); }
+    private void handleBtn7Action(ActionEvent event) { displayNumber(btn7); }
+    private void handleBtn8Action(ActionEvent event) { displayNumber(btn8); }
+    private void handleBtn9Action(ActionEvent event) { displayNumber(btn9); }
 
     private void handleBtnAddAction(ActionEvent event) { handleOperator(btnAdd); }
     private void handleBtnSubAction(ActionEvent event) { handleOperator(btnSub); }
