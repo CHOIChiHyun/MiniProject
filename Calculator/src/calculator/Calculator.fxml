@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="550.0" prefWidth="345.0" styleClass="Main" stylesheets="@Common.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="calculator.CalculatorController">
    <children>
-      <HBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="345.0">
+      <HBox fx:id="windowBar" alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="345.0">
          <children>
             <Button fx:id="btnClose" mnemonicParsing="false" prefHeight="30.0" prefWidth="30.0" styleClass="buttons">
                <graphic>

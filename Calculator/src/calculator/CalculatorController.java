@@ -13,12 +13,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 public class CalculatorController implements Initializable {
     @FXML
     private Button btnClose;
-    @FXML
-    private Button btnPoint;
     @FXML
     private Button btnDiv;
     @FXML
@@ -55,6 +55,8 @@ public class CalculatorController implements Initializable {
     private Button btnResult;
     @FXML
     private Button btnBackspace;
+    @FXML
+    private HBox windowBar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -79,101 +81,105 @@ public class CalculatorController implements Initializable {
         btnMul.setOnAction(this::handleBtnMulAction);
         btnDiv.setOnAction(this::handleBtnDivAction);
 
-        // 키보드 입력 설정
-        Platform.runLater(() ->
-            result.getScene().setOnKeyPressed(event -> {
-                KeyCode code = event.getCode();
-                boolean isShiftPressed = event.isShiftDown();
+        stageDraggableMoveWindow(); // 상단 Bar 누르면 창 이동 가능
 
-                switch (code) {
-                    case DIGIT0:
-                    case NUMPAD0:
-                        handleBtn0Action(null);
-                        break;
-                    case DIGIT1:
-                    case NUMPAD1:
-                        handleBtn1Action(null);
-                        break;
-                    case DIGIT2:
-                    case NUMPAD2:
-                        handleBtn2Action(null);
-                        break;
-                    case DIGIT3:
-                    case NUMPAD3:
-                        handleBtn3Action(null);
-                        break;
-                    case DIGIT4:
-                    case NUMPAD4:
-                        handleBtn4Action(null);
-                        break;
-                    case DIGIT5:
-                    case NUMPAD5:
-                        handleBtn5Action(null);
-                        break;
-                    case DIGIT6:
-                    case NUMPAD6:
-                        handleBtn6Action(null);
-                        break;
-                    case DIGIT7:
-                    case NUMPAD7:
-                        handleBtn7Action(null);
-                        break;
-                    case DIGIT8:
-                        if (isShiftPressed) {
-                            handleBtnMulAction(null);
-                        } else {
-                            handleBtn8Action(null);
-                        }
-                        break;
-                    case NUMPAD8:
-                        handleBtn8Action(null);
-                        break;
-                    case DIGIT9:
-                    case NUMPAD9:
-                        handleBtn9Action(null);
-                        break;
-                    case ADD:
-                    case PLUS:
-                        handleBtnAddAction(null);
-                        break;
-                    case EQUALS:
-                        if (isShiftPressed) {
-                            handleBtnAddAction(null);
-                        } else {
-                            handleBtnResultAction(null);
-                        }
-                        break;
-                    case SUBTRACT:
-                    case MINUS:
-                        handleBtnSubAction(null);
-                        break;
-                    case MULTIPLY:
-                    case ASTERISK:
+        // 키보드 입력 설정
+        Platform.runLater(() -> result.getScene().setOnKeyPressed(event -> {
+            KeyCode code = event.getCode();
+            boolean isShiftPressed = event.isShiftDown();
+
+            switch (code) {
+                case DIGIT0:
+                case NUMPAD0:
+                    handleBtn0Action(null);
+                    break;
+                case DIGIT1:
+                case NUMPAD1:
+                    handleBtn1Action(null);
+                    break;
+                case DIGIT2:
+                case NUMPAD2:
+                    handleBtn2Action(null);
+                    break;
+                case DIGIT3:
+                case NUMPAD3:
+                    handleBtn3Action(null);
+                    break;
+                case DIGIT4:
+                case NUMPAD4:
+                    handleBtn4Action(null);
+                    break;
+                case DIGIT5:
+                case NUMPAD5:
+                    handleBtn5Action(null);
+                    break;
+                case DIGIT6:
+                case NUMPAD6:
+                    handleBtn6Action(null);
+                    break;
+                case DIGIT7:
+                case NUMPAD7:
+                    handleBtn7Action(null);
+                    break;
+                case DIGIT8:
+                    if (isShiftPressed) {
                         handleBtnMulAction(null);
-                        break;
-                    case DIVIDE:
-                    case SLASH:
-                        handleBtnDivAction(null);
-                        break;
-                    case ENTER:
-                        handleBtnResultAction(null); // 엔터 키 → = 버튼 실행
-                        break;
-                    case ESCAPE:
-                    case DELETE:
-                        handleBtnClearAction(null); // 백스페이스 → Clear 버튼 실행
-                        break;
-                    case BACK_SPACE:
-                        handleBtnBackspaceAction(null);
-                        break;
-                    case F4:
-                        Platform.exit();
-                        break;
-                    default:
-                        break;
-                }
-            })
-        );
+                    } else {
+                        handleBtn8Action(null);
+                    }
+                    break;
+                case NUMPAD8:
+                    handleBtn8Action(null);
+                    break;
+                case DIGIT9:
+                case NUMPAD9:
+                    handleBtn9Action(null);
+                    break;
+                case ADD:
+                case PLUS:
+                    handleBtnAddAction(null);
+                    break;
+                case EQUALS:
+                    if (isShiftPressed) {
+                        handleBtnAddAction(null);
+                    } else {
+                        handleBtnResultAction(null);
+                    }
+                    break;
+                case SUBTRACT:
+                case MINUS:
+                    handleBtnSubAction(null);
+                    break;
+                case MULTIPLY:
+                case ASTERISK:
+                    handleBtnMulAction(null);
+                    break;
+                case DIVIDE:
+                case SLASH:
+                    handleBtnDivAction(null);
+                    break;
+                case ENTER:
+                    handleBtnResultAction(null); // 엔터 키 → = 버튼 실행
+                    break;
+                case ESCAPE:
+                case DELETE:
+                    handleBtnClearAction(null); // 백스페이스 → Clear 버튼 실행
+                    break;
+                case BACK_SPACE:
+                    handleBtnBackspaceAction(null);
+                    break;
+                case F4:
+                    Platform.exit();
+                    break;
+                default:
+                    break;
+            }
+        }));
     }
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+    private Stage stage = null;
 
     private int calResult = 0;  //연산 결과
     ArrayList<Integer> number = new ArrayList<>(); // 입력된 숫자 배열
@@ -184,66 +190,41 @@ public class CalculatorController implements Initializable {
     private void handleBtn0Action(ActionEvent event) {
         displayNumber(btn0);
     }
-
-    private void handleBtn1Action(ActionEvent event) {
-        displayNumber(btn1);
-    }
-
+    private void handleBtn1Action(ActionEvent event) { displayNumber(btn1); }
     private void handleBtn2Action(ActionEvent event) {
         displayNumber(btn2);
     }
-
     private void handleBtn3Action(ActionEvent event) {
         displayNumber(btn3);
     }
-
     private void handleBtn4Action(ActionEvent event) {
         displayNumber(btn4);
     }
-
     private void handleBtn5Action(ActionEvent event) {
         displayNumber(btn5);
     }
-
     private void handleBtn6Action(ActionEvent event) {
         displayNumber(btn6);
     }
-
     private void handleBtn7Action(ActionEvent event) {
         displayNumber(btn7);
     }
-
     private void handleBtn8Action(ActionEvent event) {
         displayNumber(btn8);
     }
-
     private void handleBtn9Action(ActionEvent event) {
         displayNumber(btn9);
     }
 
-    private void handleBtnAddAction(ActionEvent event) {
-        saveNumber();
-        handleOperator(btnAdd);
-    }
-
-    private void handleBtnSubAction(ActionEvent event) {
-        saveNumber();
-        handleOperator(btnSub);
-    }
-
-    private void handleBtnMulAction(ActionEvent event) {
-        saveNumber();
-        handleOperator(btnMul);
-    }
-
-    private void handleBtnDivAction(ActionEvent event) {
-        saveNumber();
-        handleOperator(btnDiv);
-    }
+    private void handleBtnAddAction(ActionEvent event) { handleOperator(btnAdd); }
+    private void handleBtnSubAction(ActionEvent event) { handleOperator(btnSub); }
+    private void handleBtnMulAction(ActionEvent event) { handleOperator(btnMul); }
+    private void handleBtnDivAction(ActionEvent event) { handleOperator(btnDiv); }
 
     private void handleBtnResultAction(ActionEvent event) {
-        saveNumber();
         calculate();
+        System.out.println("Enter 입력");
+        System.out.println(number.size() + number.get(0));
     }
 
     private void handleBtnClearAction(ActionEvent event) {
@@ -263,11 +244,21 @@ public class CalculatorController implements Initializable {
     }
 
     private void calculate() {
-        //입력된 숫자가 2개가 안되면 연산 진행 안하고 calculate 메서드 종료
-        if (number.size() < 2) {
-            return;
-        }
+        saveNumber();
 
+        // 입력된 숫자가 2개가 안되면 연산 진행 안하고 calculate 매서드 종료
+        if (number.size() < 2) { return; }
+
+        calculateResult(); // 연산자별 연산 진행
+
+        String strResult = Integer.toString(calResult);
+        result.setText(strResult);
+        number.clear();
+        number.add(calResult);
+        System.out.println("계산 결과 = " + calResult);
+    }
+
+    private void calculateResult() {
         switch (oper.get(0)) {
             case "+":
                 calResult = (int) calculator.add(number.get(0), number.get(1));
@@ -288,12 +279,6 @@ public class CalculatorController implements Initializable {
             default:
                 break;
         }
-
-        String strResult = Integer.toString(calResult);
-        result.setText(strResult);
-        number.clear();
-        number.add(calResult);
-        System.out.println("계산 결과 = " + calResult);
     }
 
     private void displayNumber(Button button) {
@@ -334,6 +319,8 @@ public class CalculatorController implements Initializable {
     }
 
     private void handleOperator(Button button) {
+        saveNumber();
+
         result.setText(button.getText());
 
         if (!oper.isEmpty()) {
@@ -342,5 +329,42 @@ public class CalculatorController implements Initializable {
         }
 
         oper.add(button.getText());
+    }
+
+    private void stageDraggableMoveWindow() {
+        windowBarPressed();
+        windowBarDragged();
+        windowBarDragDone();
+        mouseReleased();
+    }
+
+    private void windowBarPressed() {
+        windowBar.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+    }
+
+    private void windowBarDragged() {
+        windowBar.setOnMouseDragged(event -> {
+            stage = (Stage) windowBar.getScene().getWindow();
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+            stage.setOpacity(0.8f);
+        });
+    }
+
+    private void windowBarDragDone() {
+        windowBar.setOnDragDone(event -> {
+            stage = (Stage) windowBar.getScene().getWindow();
+            stage.setOpacity(1.0f);
+        });
+    }
+
+    private void mouseReleased() {
+        windowBar.setOnMouseReleased(event -> {
+            stage = (Stage) windowBar.getScene().getWindow();
+            stage.setOpacity(1.0f);
+        });
     }
 }
