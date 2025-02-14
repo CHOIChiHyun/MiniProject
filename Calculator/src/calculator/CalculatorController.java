@@ -1,11 +1,5 @@
 package calculator;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +8,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class CalculatorController implements Initializable {
     @FXML private Button btnClose;
@@ -191,7 +191,7 @@ public class CalculatorController implements Initializable {
     private void handleBtnClearAction(ActionEvent event) {
         result.setText("");
         arrayClear();
-        System.out.println("CLEAR SUCCESS!!");
+        Log.info("CLEAR SUCCESS!!");
     }
 
     private void handleBtnBackspaceAction(ActionEvent event) {
@@ -215,9 +215,9 @@ public class CalculatorController implements Initializable {
         // 계산 후 단순 반복 작업
         number.clear();
         number.add(calResult);
-        System.out.println("계산 결과 = " + calResult);
+        Log.info("계산 결과 = " + calResult);
 
-        // Integer형/Double형 판별 후 형태에 맞게 setText()
+        // Integer 형/Double 형 판별 후 형태에 맞게 setText()
         checkResultFormat();
     }
 
@@ -246,7 +246,7 @@ public class CalculatorController implements Initializable {
                 try {
                     calResult = calculator.div(number.get(0), number.get(1));
                 } catch (ArithmeticException e) {
-                    System.out.println("Arithmetic Exception 발생!");
+                    Log.info("Arithmetic Exception 발생!");
                 }
                 break;
             default:
@@ -281,7 +281,7 @@ public class CalculatorController implements Initializable {
             strNumber.clear();
             number.add(Double.parseDouble(num.toString()));
         } catch (NumberFormatException e) {
-            System.out.println("NumberFormatException 발생!");
+            Log.info("NumberFormatException 발생!");
         }
     }
 
