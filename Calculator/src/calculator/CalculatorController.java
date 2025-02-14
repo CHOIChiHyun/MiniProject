@@ -222,7 +222,7 @@ public class CalculatorController implements Initializable {
     }
 
     private void checkResultFormat() {
-        String strResult = "";
+        String strResult;
         if (calResult == (int) calResult) {
             strResult = Integer.toString((int) calResult);
         } else {
