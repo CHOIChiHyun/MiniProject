@@ -14,49 +14,28 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 
 public class CalculatorController implements Initializable {
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnDiv;
-    @FXML
-    private Button btnClear;
-    @FXML
-    private Label result;
-    @FXML
-    private Button btn8;
-    @FXML
-    private Button btn9;
-    @FXML
-    private Button btn6;
-    @FXML
-    private Button btnSub;
-    @FXML
-    private Button btn7;
-    @FXML
-    private Button btnAdd;
-    @FXML
-    private Button btn4;
-    @FXML
-    private Button btn5;
-    @FXML
-    private Button btn2;
-    @FXML
-    private Button btnMul;
-    @FXML
-    private Button btn3;
-    @FXML
-    private Button btn0;
-    @FXML
-    private Button btn1;
-    @FXML
-    private Button btnResult;
-    @FXML
-    private Button btnBackspace;
-    @FXML
-    private HBox windowBar;
+    @FXML private Button btnClose;
+    @FXML private Button btnDiv;
+    @FXML private Button btnClear;
+    @FXML private Label result;
+    @FXML private Button btn8;
+    @FXML private Button btn9;
+    @FXML private Button btn6;
+    @FXML private Button btnSub;
+    @FXML private Button btn7;
+    @FXML private Button btnAdd;
+    @FXML private Button btn4;
+    @FXML private Button btn5;
+    @FXML private Button btn2;
+    @FXML private Button btnMul;
+    @FXML private Button btn3;
+    @FXML private Button btn0;
+    @FXML private Button btn1;
+    @FXML private Button btnResult;
+    @FXML private Button btnBackspace;
+    @FXML private HBox windowBar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -81,7 +60,8 @@ public class CalculatorController implements Initializable {
         btnMul.setOnAction(this::handleBtnMulAction);
         btnDiv.setOnAction(this::handleBtnDivAction);
 
-        stageDraggableMoveWindow(); // 상단 Bar 누르면 창 이동 가능
+        WindowDraggable windowDraggable = new WindowDraggable();
+        windowDraggable.stageDraggableMoveWindow(windowBar); // 상단 Bar 누르면 창 이동 가능
 
         // 키보드 입력 설정
         Platform.runLater(() -> result.getScene().setOnKeyPressed(event -> {
@@ -177,10 +157,6 @@ public class CalculatorController implements Initializable {
         }));
     }
 
-    private double xOffset = 0;
-    private double yOffset = 0;
-    private Stage stage = null;
-
     private int calResult = 0;  //연산 결과
     ArrayList<Integer> number = new ArrayList<>(); // 입력된 숫자 배열
     ArrayList<String> strNumber = new ArrayList<>();  // 입력된 숫자 배열(String)
@@ -203,11 +179,7 @@ public class CalculatorController implements Initializable {
     private void handleBtnMulAction(ActionEvent event) { handleOperator(btnMul); }
     private void handleBtnDivAction(ActionEvent event) { handleOperator(btnDiv); }
 
-    private void handleBtnResultAction(ActionEvent event) {
-        calculate();
-        System.out.println("Enter 입력");
-        System.out.println(number.size() + number.get(0));
-    }
+    private void handleBtnResultAction(ActionEvent event) { calculate(); }
 
     private void handleBtnClearAction(ActionEvent event) {
         result.setText("");
@@ -311,42 +283,5 @@ public class CalculatorController implements Initializable {
         }
 
         oper.add(button.getText());
-    }
-
-    private void stageDraggableMoveWindow() {
-        windowBarPressed();
-        windowBarDragged();
-        windowBarDragDone();
-        mouseReleased();
-    }
-
-    private void windowBarPressed() {
-        windowBar.setOnMousePressed(event -> {
-            xOffset = event.getSceneX();
-            yOffset = event.getSceneY();
-        });
-    }
-
-    private void windowBarDragged() {
-        windowBar.setOnMouseDragged(event -> {
-            stage = (Stage) windowBar.getScene().getWindow();
-            stage.setX(event.getScreenX() - xOffset);
-            stage.setY(event.getScreenY() - yOffset);
-            stage.setOpacity(0.8f);
-        });
-    }
-
-    private void windowBarDragDone() {
-        windowBar.setOnDragDone(event -> {
-            stage = (Stage) windowBar.getScene().getWindow();
-            stage.setOpacity(1.0f);
-        });
-    }
-
-    private void mouseReleased() {
-        windowBar.setOnMouseReleased(event -> {
-            stage = (Stage) windowBar.getScene().getWindow();
-            stage.setOpacity(1.0f);
-        });
     }
 }
