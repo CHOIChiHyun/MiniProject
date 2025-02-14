@@ -83,7 +83,8 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                            <children>
-                              <Button fx:id="btn0" mnemonicParsing="false" prefHeight="60.0" prefWidth="220.0" styleClass="buttons" text="0" />
+                              <Button fx:id="btnPoint" mnemonicParsing="false" prefHeight="60.0" prefWidth="60.0" styleClass="buttons" text="." />
+                              <Button fx:id="btn0" mnemonicParsing="false" prefHeight="60.0" prefWidth="140.0" styleClass="buttons" text="0" />
                            </children>
                         </HBox>
                      </children>

@@ -36,6 +36,7 @@ public class CalculatorController implements Initializable {
     @FXML private Button btnResult;
     @FXML private Button btnBackspace;
     @FXML private HBox windowBar;
+    @FXML private Button btnPoint;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -54,6 +55,7 @@ public class CalculatorController implements Initializable {
         btn7.setOnAction(this::handleBtn7Action);
         btn8.setOnAction(this::handleBtn8Action);
         btn9.setOnAction(this::handleBtn9Action);
+        btnPoint.setOnAction(this::handleBtnPointAction);
 
         btnAdd.setOnAction(this::handleBtnAddAction);
         btnSub.setOnAction(this::handleBtnSubAction);
@@ -116,6 +118,9 @@ public class CalculatorController implements Initializable {
                 case NUMPAD9:
                     handleBtn9Action(null);
                     break;
+                case PERIOD:
+                    handleBtnPointAction(null);
+                    break;
                 case ADD:
                 case PLUS:
                     handleBtnAddAction(null);
@@ -174,6 +179,7 @@ public class CalculatorController implements Initializable {
     private void handleBtn7Action(ActionEvent event) { displayNumber(btn7); }
     private void handleBtn8Action(ActionEvent event) { displayNumber(btn8); }
     private void handleBtn9Action(ActionEvent event) { displayNumber(btn9); }
+    private void handleBtnPointAction(ActionEvent event) { displayNumber(btnPoint); }
 
     private void handleBtnAddAction(ActionEvent event) { handleOperator(btnAdd); }
     private void handleBtnSubAction(ActionEvent event) { handleOperator(btnSub); }
@@ -192,8 +198,8 @@ public class CalculatorController implements Initializable {
         int length = strNumber.size();
         strNumber.remove(length - 1);
         StringBuilder backspaceNumber = new StringBuilder();
-        for (int i = 0; i < strNumber.size(); i++) {
-            backspaceNumber.append(strNumber.get(i));
+        for (String s : strNumber) {
+            backspaceNumber.append(s);
         }
         result.setText(backspaceNumber.toString());
     }
@@ -206,11 +212,23 @@ public class CalculatorController implements Initializable {
 
         calculateResult(); // 연산자별 연산 진행
 
-        String strResult = Double.toString(calResult);
-        result.setText(strResult);
+        // 계산 후 단순 반복 작업
         number.clear();
         number.add(calResult);
         System.out.println("계산 결과 = " + calResult);
+
+        // Integer형/Double형 판별 후 형태에 맞게 setText()
+        checkResultFormat();
+    }
+
+    private void checkResultFormat() {
+        String strResult = "";
+        if (calResult == (int) calResult) {
+            strResult = Integer.toString((int) calResult);
+        } else {
+            strResult = Double.toString(calResult);
+        }
+        result.setText(strResult);
     }
 
     private void calculateResult() {
@@ -247,8 +265,8 @@ public class CalculatorController implements Initializable {
         strNumber.add(inputNumber);
 
         StringBuilder setNumber = new StringBuilder();
-        for (int i = 0; i < strNumber.size(); i++) {
-            setNumber.append(strNumber.get(i));
+        for (String s : strNumber) {
+            setNumber.append(s);
         }
 
         result.setText(setNumber.toString());
@@ -257,8 +275,8 @@ public class CalculatorController implements Initializable {
     private void saveNumber() {
         try {
             StringBuilder num = new StringBuilder();
-            for (int i = 0; i < strNumber.size(); i++) {
-                num.append(strNumber.get(i));
+            for (String s : strNumber) {
+                num.append(s);
             }
             strNumber.clear();
             number.add(Double.parseDouble(num.toString()));
