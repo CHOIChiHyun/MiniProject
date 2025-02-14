@@ -60,8 +60,9 @@ public class CalculatorController implements Initializable {
         btnMul.setOnAction(this::handleBtnMulAction);
         btnDiv.setOnAction(this::handleBtnDivAction);
 
+        // 상단 Bar 누르면 창 이동 가능
         WindowDraggable windowDraggable = new WindowDraggable();
-        windowDraggable.stageDraggableMoveWindow(windowBar); // 상단 Bar 누르면 창 이동 가능
+        windowDraggable.stageDraggableMoveWindow(windowBar);
 
         // 키보드 입력 설정
         Platform.runLater(() -> result.getScene().setOnKeyPressed(event -> {
@@ -157,8 +158,8 @@ public class CalculatorController implements Initializable {
         }));
     }
 
-    private int calResult = 0;  //연산 결과
-    ArrayList<Integer> number = new ArrayList<>(); // 입력된 숫자 배열
+    private double calResult = 0;  //연산 결과
+    ArrayList<Double> number = new ArrayList<>(); // 입력된 숫자 배열
     ArrayList<String> strNumber = new ArrayList<>();  // 입력된 숫자 배열(String)
     ArrayList<String> oper = new ArrayList<>();   // 입력된 연산자 배열
     Calculator calculator = new Calculator();   // Calculator Model
@@ -205,7 +206,7 @@ public class CalculatorController implements Initializable {
 
         calculateResult(); // 연산자별 연산 진행
 
-        String strResult = Integer.toString(calResult);
+        String strResult = Double.toString(calResult);
         result.setText(strResult);
         number.clear();
         number.add(calResult);
@@ -215,17 +216,17 @@ public class CalculatorController implements Initializable {
     private void calculateResult() {
         switch (oper.get(0)) {
             case "+":
-                calResult = (int) calculator.add(number.get(0), number.get(1));
+                calResult = calculator.add(number.get(0), number.get(1));
                 break;
             case "-":
-                calResult = (int) calculator.sub(number.get(0), number.get(1));
+                calResult = calculator.sub(number.get(0), number.get(1));
                 break;
             case "X":
-                calResult = (int) calculator.mul(number.get(0), number.get(1));
+                calResult = calculator.mul(number.get(0), number.get(1));
                 break;
             case "/":
                 try {
-                    calResult = (int) calculator.div(number.get(0), number.get(1));
+                    calResult = calculator.div(number.get(0), number.get(1));
                 } catch (ArithmeticException e) {
                     System.out.println("Arithmetic Exception 발생!");
                 }
@@ -260,7 +261,7 @@ public class CalculatorController implements Initializable {
                 num.append(strNumber.get(i));
             }
             strNumber.clear();
-            number.add(Integer.parseInt(num.toString()));
+            number.add(Double.parseDouble(num.toString()));
         } catch (NumberFormatException e) {
             System.out.println("NumberFormatException 발생!");
         }
